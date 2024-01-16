@@ -1,4 +1,4 @@
-package com.example.newsapp.Screens
+package com.example.newsapp.AllNewsScreens
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,19 +25,18 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.newsapp.R
 import com.example.newsapp.network.Article
-import com.example.newsapp.viewmodels.NewsUiState
-
+import com.example.newsapp.NewsUiState
 
 @Composable
-fun HealthNews(newsUiState: NewsUiState){
-    Text(text = "Health", modifier = Modifier.padding(start=10.dp), style = MaterialTheme.typography.headlineLarge)
+fun EntNews(newsUiState: NewsUiState){
+    Text(text = "Entertainment", modifier = Modifier.padding(start=10.dp), style = MaterialTheme.typography.headlineLarge)
     when(newsUiState){
         NewsUiState.Error -> Text(text = "error")
         NewsUiState.Loading -> Text(text = "loading")
         is NewsUiState.Success -> {
             LazyColumn(modifier = Modifier.padding(top = 40.dp)){
                 items(newsUiState.news.articles){
-                    HNewsCard(article=it)
+                    ENewsCard(article=it)
                 }
             }
 
@@ -45,7 +44,7 @@ fun HealthNews(newsUiState: NewsUiState){
     }
 }
 @Composable
-fun HNewsCard(article: Article){
+fun ENewsCard(article: Article){
     Card(elevation = CardDefaults.cardElevation(5.dp),
         modifier = Modifier
             .padding(top = 10.dp, start = 10.dp, end = 10.dp)

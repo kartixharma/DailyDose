@@ -4,6 +4,10 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface NewsApiService {
+    //@GET("v1/4a18bee7-0f4d-4c7b-bdcc-f3762b1bf049")
+    //suspend fun getTop(
+    //):NewsResponse
+
     @GET("v2/top-headlines")
     suspend fun getTop(
         @Query("country")
@@ -11,9 +15,8 @@ interface NewsApiService {
         @Query("page")
         pgNo: Int = 1,
         @Query("apiKey")
-        apikey: String = "10455c48a6404ff7bfa4bd5fc6e36af9"
+        apikey: String = "ed6ec2b8dbc44222b64d486c4164d924"
     ):NewsResponse
-
     @GET("v2/top-headlines")
     suspend fun getHealth(
         @Query("country")
@@ -23,7 +26,7 @@ interface NewsApiService {
         @Query("page")
         pgNo: Int = 1,
         @Query("apiKey")
-        apikey: String = "10455c48a6404ff7bfa4bd5fc6e36af9"
+        apikey: String = "ed6ec2b8dbc44222b64d486c4164d924"
     ):NewsResponse
 
     @GET("v2/everything")
@@ -33,7 +36,7 @@ interface NewsApiService {
         @Query("page")
         pgNo: Int = 1,
         @Query("apiKey")
-        apikey: String = "10455c48a6404ff7bfa4bd5fc6e36af9"
+        apikey: String = "ed6ec2b8dbc44222b64d486c4164d924"
     ): NewsResponse
 
     @GET("v2/top-headlines")
@@ -45,7 +48,7 @@ interface NewsApiService {
         @Query("page")
         pgNo: Int = 1,
         @Query("apiKey")
-        apikey: String = "10455c48a6404ff7bfa4bd5fc6e36af9"
+        apikey: String = "ed6ec2b8dbc44222b64d486c4164d924"
     ):NewsResponse
 
     @GET("v2/top-headlines")
@@ -57,6 +60,6 @@ interface NewsApiService {
         @Query("page")
         pgNo: Int = 1,
         @Query("apiKey")
-        apikey: String = "10455c48a6404ff7bfa4bd5fc6e36af9"
+        apikey: String = "ed6ec2b8dbc44222b64d486c4164d924"
     ):NewsResponse
 }

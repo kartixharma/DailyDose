@@ -1,4 +1,4 @@
-package com.example.newsapp.Screens
+package com.example.newsapp.AllNewsScreens
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -21,22 +22,26 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.newsapp.NewsUiState
+import com.example.newsapp.NewsViewModel
 import com.example.newsapp.R
 import com.example.newsapp.network.Article
-import com.example.newsapp.viewmodels.NewsUiState
 
 @Composable
-fun EntNews(newsUiState: NewsUiState){
-    Text(text = "Entertainment", modifier = Modifier.padding(start=10.dp), style = MaterialTheme.typography.headlineLarge)
+fun SearchScreen(){
+    val newsViewModel: NewsViewModel = viewModel(factory = NewsViewModel.Factory)
+    val newsUiState = newsViewModel.newsUiState
+    OutlinedTextField(value = newsViewModel.search, onValueChange ={newsViewModel.setSrc(it)})
     when(newsUiState){
         NewsUiState.Error -> Text(text = "error")
         NewsUiState.Loading -> Text(text = "loading")
         is NewsUiState.Success -> {
             LazyColumn(modifier = Modifier.padding(top = 40.dp)){
                 items(newsUiState.news.articles){
-                    ENewsCard(article=it)
+                    SrNewsCard(article=it)
                 }
             }
 
@@ -44,7 +49,7 @@ fun EntNews(newsUiState: NewsUiState){
     }
 }
 @Composable
-fun ENewsCard(article: Article){
+fun SrNewsCard(article: Article){
     Card(elevation = CardDefaults.cardElevation(5.dp),
         modifier = Modifier
             .padding(top = 10.dp, start = 10.dp, end = 10.dp)

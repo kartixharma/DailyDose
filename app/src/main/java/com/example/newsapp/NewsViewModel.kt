@@ -1,19 +1,22 @@
-package com.example.newsapp.viewmodels
+package com.example.newsapp
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.newsapp.NewsApplication
 import com.example.newsapp.data.NewsRepository
 import com.example.newsapp.network.NewsResponse
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import okhttp3.Dispatcher
 import java.io.IOException
 
 sealed interface NewsUiState{
@@ -25,9 +28,30 @@ sealed interface NewsUiState{
 class NewsViewModel(private val newsRepository: NewsRepository): ViewModel() {
     var newsUiState: NewsUiState by mutableStateOf(NewsUiState.Loading)
         private set
+    var search by mutableStateOf("")
+        private set
     init {
         getTop()
     }
+    fun setSrc(q: String) {
+        search = q
+        if(search!="") {
+            viewModelScope.launch {
+                newsUiState = try {
+                    val Result = newsRepository.getAll(search)
+                    NewsUiState.Success(Result)
+                } catch (e: IOException) {
+                    NewsUiState.Error
+                }
+            }
+        }
+        else{
+            getTop()
+        }
+
+
+    }
+
     fun getTop() {
         viewModelScope.launch(Dispatchers.IO) {
             newsUiState = try {

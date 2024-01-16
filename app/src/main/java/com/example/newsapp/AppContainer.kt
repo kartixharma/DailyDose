@@ -12,7 +12,7 @@ interface AppContainer {
     val newsRepository: NewsRepository
 }
 class DefaultAppContainer: AppContainer{
-
+    //https://mocki.io
     private val retrofit = Retrofit.Builder()
         .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
         .baseUrl("https://newsapi.org")
