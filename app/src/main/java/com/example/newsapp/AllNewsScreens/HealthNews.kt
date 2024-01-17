@@ -27,7 +27,6 @@ import com.example.newsapp.R
 import com.example.newsapp.network.Article
 import com.example.newsapp.NewsUiState
 
-
 @Composable
 fun HealthNews(newsUiState: NewsUiState){
     Text(text = "Health", modifier = Modifier.padding(start=10.dp), style = MaterialTheme.typography.headlineLarge)
@@ -40,7 +39,6 @@ fun HealthNews(newsUiState: NewsUiState){
                     HNewsCard(article=it)
                 }
             }
-
         }
     }
 }
