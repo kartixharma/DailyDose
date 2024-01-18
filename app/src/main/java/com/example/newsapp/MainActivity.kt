@@ -44,6 +44,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.newsapp.AllNewsScreens.DetailScreen
 import com.example.newsapp.AllNewsScreens.EntNews
 import com.example.newsapp.AllNewsScreens.HealthNews
 import com.example.newsapp.AllNewsScreens.SavedScreen
@@ -51,13 +52,15 @@ import com.example.newsapp.AllNewsScreens.SearchScreen
 import com.example.newsapp.AllNewsScreens.Settings
 import com.example.newsapp.AllNewsScreens.SportsNews
 import com.example.newsapp.AllNewsScreens.TopNews
+import com.example.newsapp.network.Article
 import com.example.newsapp.ui.theme.NewsAppTheme
 
 enum class Screens {
     News,
     Saved,
     Search,
-    Settings
+    Settings,
+    Detail
 }
 data class BottomNavigationItem(
     val title: String,
@@ -132,13 +135,17 @@ class MainActivity : ComponentActivity() {
                         }
                         }
                     ) {innerPadding->
+                        lateinit var article: Article
                         NavHost(
                             navController = navController,
                             startDestination = Screens.News.name,
                             modifier = Modifier.padding(innerPadding)
                         ) {
                             composable(route = Screens.News.name){
-                                MainScreen()
+                                MainScreen(isClicked = {
+                                    article = it
+                                    navController.navigate(route = Screens.Detail.name)
+                                     })
                             }
                             composable(route = Screens.Search.name){
                                 SearchScreen()
@@ -149,7 +156,9 @@ class MainActivity : ComponentActivity() {
                             composable(route = Screens.Settings.name){
                                 Settings()
                             }
-
+                            composable(route = Screens.Detail.name){
+                                DetailScreen(article)
+                            }
                         }
                     }
                 }

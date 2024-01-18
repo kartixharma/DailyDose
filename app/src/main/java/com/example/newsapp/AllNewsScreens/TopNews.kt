@@ -1,18 +1,15 @@
 package com.example.newsapp.AllNewsScreens
 
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,10 +28,8 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
@@ -50,8 +45,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.newsapp.NewsScreens
 import com.example.newsapp.R
 import com.example.newsapp.network.Article
 import com.example.newsapp.NewsUiState
@@ -59,7 +58,7 @@ import kotlin.math.absoluteValue
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun TopNews(newsUiState: NewsUiState){
+fun TopNews(newsUiState: NewsUiState, isClicked:(Article) -> Unit){
     val pagerState = rememberPagerState(
         pageCount = {5}, initialPage = 1
     )
@@ -123,12 +122,12 @@ fun TopNews(newsUiState: NewsUiState){
             }
             Row(modifier = Modifier
                 .padding(top = 350.dp)
-                .height(50.dp)
                 .fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center) {
                 repeat(5){
                     val color = if (pagerState.currentPage==it){ if(isSystemInDarkTheme()) Color(0xFF1560bd) else Color(0xFF0047ab) }else Color.LightGray
-                    Box(modifier = Modifier.padding(2.dp)
+                    Box(modifier = Modifier
+                        .padding(2.dp)
                         .clip(CircleShape)
                         .size(11.dp)
                         .background(color))
@@ -138,7 +137,9 @@ fun TopNews(newsUiState: NewsUiState){
             LazyColumn(modifier = Modifier.padding(top = 370.dp)){
                 items(newsUiState.news.articles){
                     if(it.urlToImage!="null") {
-                        NewsCard(article = it)
+                        NewsCard(article = it, isClicked = {
+                            isClicked(it)
+                        })
                     }
                 }
             }
@@ -147,10 +148,11 @@ fun TopNews(newsUiState: NewsUiState){
     }
 }
 @Composable
-fun NewsCard(article: Article){
+fun NewsCard(article: Article, isClicked:(Article) ->Unit){
     Card(
         modifier = Modifier
             .padding(start = 10.dp, end = 10.dp)
+            .clickable{ isClicked(article) }
             .height(120.dp), colors = CardDefaults.cardColors(Color.Transparent)) {
         Row {
             AsyncImage(model = ImageRequest.Builder(context = LocalContext.current)

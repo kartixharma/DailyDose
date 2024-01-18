@@ -32,6 +32,7 @@ import com.example.newsapp.AllNewsScreens.EntNews
 import com.example.newsapp.AllNewsScreens.HealthNews
 import com.example.newsapp.AllNewsScreens.SportsNews
 import com.example.newsapp.AllNewsScreens.TopNews
+import com.example.newsapp.network.Article
 
 enum class NewsScreens {
     Main,
@@ -41,7 +42,7 @@ enum class NewsScreens {
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(){
+fun MainScreen(isClicked:(Article)->Unit){
     val newsViewModel: NewsViewModel = viewModel(factory = NewsViewModel.Factory)
     val newsUiState = newsViewModel.newsUiState
     val navController = rememberNavController()
@@ -146,7 +147,7 @@ fun MainScreen(){
                 modifier = Modifier.padding(innerPadding)
             ) {
                 composable(route = NewsScreens.Main.name){
-                    TopNews(newsUiState = newsUiState)
+                    TopNews(newsUiState = newsUiState, isClicked={isClicked(it)})
                 }
                 composable(route = NewsScreens.Health.name){
                     HealthNews(newsUiState = newsUiState)
