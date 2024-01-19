@@ -2,14 +2,18 @@ package com.example.newsapp.AllNewsScreens
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -34,12 +38,20 @@ import com.example.newsapp.network.Article
 fun SearchScreen(){
     val newsViewModel: NewsViewModel = viewModel(factory = NewsViewModel.Factory)
     val newsUiState = newsViewModel.newsUiState
-    OutlinedTextField(value = newsViewModel.search, onValueChange ={newsViewModel.setSrc(it)})
+    OutlinedTextField(modifier = Modifier
+        .fillMaxWidth()
+        .padding(start = 30.dp, top = 15.dp, end = 30.dp), 
+        value = newsViewModel.search, 
+        onValueChange ={newsViewModel.setSrc(it)},
+        leadingIcon = { Icon(imageVector = Icons.Filled.Search, contentDescription = null)},
+        shape = RoundedCornerShape(15.dp),
+        placeholder = { Text(text = "Search...")}
+    )
     when(newsUiState){
         NewsUiState.Error -> Text(text = "error")
         NewsUiState.Loading -> Text(text = "loading")
         is NewsUiState.Success -> {
-            LazyColumn(modifier = Modifier.padding(top = 40.dp)){
+            LazyColumn(modifier = Modifier.padding(top = 80.dp)){
                 items(newsUiState.news.articles){
                     SrNewsCard(article=it)
                 }

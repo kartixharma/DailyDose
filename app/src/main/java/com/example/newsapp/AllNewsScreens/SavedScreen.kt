@@ -115,7 +115,7 @@ fun SavedNewsCard(article: Article, isClicked:(Article) ->Unit){
                 .fillMaxHeight()) {
                 Text(text = article.title.toString(), maxLines = 3, overflow = TextOverflow.Ellipsis, fontWeight = FontWeight.Bold)
                 Column(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier.fillMaxSize().padding(5.dp),
                     verticalArrangement = Arrangement.Bottom,
                     horizontalAlignment = Alignment.End
                 ) {
