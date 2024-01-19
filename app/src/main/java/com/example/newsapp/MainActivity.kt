@@ -144,6 +144,9 @@ class MainActivity : ComponentActivity() {
                                 SavedScreen(state, isClicked = {
                                     article = it
                                     navController.navigate(route = Screens.Detail.name)
+                                }, onSwiped = {
+                                    article = it
+                                    newsViewModel.deleteArticle(it)
                                 })
                             }
                             composable(route = Screens.Settings.name){

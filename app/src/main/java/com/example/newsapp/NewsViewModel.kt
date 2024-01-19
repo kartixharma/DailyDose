@@ -112,6 +112,13 @@ class NewsViewModel(private val newsRepository: NewsRepository): ViewModel() {
             newsRepository.insert(article)
         }
     }
+
+    fun deleteArticle(article: Article) {
+        viewModelScope.launch {
+            newsRepository.deleteArticle(article)
+        }
+    }
+
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
