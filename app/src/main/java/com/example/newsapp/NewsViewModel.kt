@@ -10,12 +10,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.newsapp.data.NewsRepository
+import com.example.newsapp.network.Article
 import com.example.newsapp.network.NewsResponse
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.io.IOException
 
@@ -26,6 +32,14 @@ sealed interface NewsUiState{
 }
 
 class NewsViewModel(private val newsRepository: NewsRepository): ViewModel() {
+    private val _uiState = MutableStateFlow(NewsState())
+    val savedNews = newsRepository.getArticles().stateIn(viewModelScope, SharingStarted.WhileSubscribed(),
+        emptyList())
+    val state = combine(_uiState, savedNews){ state, news ->
+        state.copy(
+            savedNews = news
+        )
+    }
     var newsUiState: NewsUiState by mutableStateOf(NewsUiState.Loading)
         private set
     var search by mutableStateOf("")
@@ -48,10 +62,7 @@ class NewsViewModel(private val newsRepository: NewsRepository): ViewModel() {
         else{
             getTop()
         }
-
-
     }
-
     fun getTop() {
         viewModelScope.launch(Dispatchers.IO) {
             newsUiState = try {
@@ -96,7 +107,11 @@ class NewsViewModel(private val newsRepository: NewsRepository): ViewModel() {
             }
         }
     }
-
+    fun insertArticle(article: Article){
+        viewModelScope.launch {
+            newsRepository.insert(article)
+        }
+    }
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {

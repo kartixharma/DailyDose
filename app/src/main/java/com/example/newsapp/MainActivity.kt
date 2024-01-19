@@ -6,11 +6,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Search
@@ -20,38 +17,29 @@ import androidx.compose.material.icons.outlined.List
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.Star
-import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.Card
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.newsapp.AllNewsScreens.DetailScreen
-import com.example.newsapp.AllNewsScreens.EntNews
-import com.example.newsapp.AllNewsScreens.HealthNews
 import com.example.newsapp.AllNewsScreens.SavedScreen
 import com.example.newsapp.AllNewsScreens.SearchScreen
 import com.example.newsapp.AllNewsScreens.Settings
-import com.example.newsapp.AllNewsScreens.SportsNews
-import com.example.newsapp.AllNewsScreens.TopNews
 import com.example.newsapp.network.Article
 import com.example.newsapp.ui.theme.NewsAppTheme
 
@@ -135,6 +123,8 @@ class MainActivity : ComponentActivity() {
                         }
                         }
                     ) {innerPadding->
+                        val newsViewModel: NewsViewModel = viewModel(factory = NewsViewModel.Factory)
+                        val state by newsViewModel.state.collectAsState(initial = NewsState())
                         lateinit var article: Article
                         NavHost(
                             navController = navController,
@@ -151,13 +141,16 @@ class MainActivity : ComponentActivity() {
                                 SearchScreen()
                             }
                             composable(route = Screens.Saved.name){
-                                SavedScreen()
+                                SavedScreen(state, isClicked = {
+                                    article = it
+                                    navController.navigate(route = Screens.Detail.name)
+                                })
                             }
                             composable(route = Screens.Settings.name){
                                 Settings()
                             }
                             composable(route = Screens.Detail.name){
-                                DetailScreen(article)
+                                DetailScreen(article, addToDB = {newsViewModel.insertArticle(it)})
                             }
                         }
                     }

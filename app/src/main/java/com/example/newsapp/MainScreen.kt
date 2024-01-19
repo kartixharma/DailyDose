@@ -61,13 +61,13 @@ fun MainScreen(isClicked:(Article)->Unit){
                                 border = if(selectedCard==1) null else CardDefaults.outlinedCardBorder(),
                                 colors = if(selectedCard==1) CardDefaults.cardColors(MaterialTheme.colorScheme.primaryContainer) else CardDefaults.cardColors(Color.Transparent)
                             ) {
-                                Text(text = "HeadLines",
+                                Text(text = "Headlines", fontSize = 20.sp,
                                     modifier = Modifier
                                         .padding(
-                                            bottom = 5.dp,
-                                            top = 5.dp,
-                                            end = 10.dp,
-                                            start = 10.dp
+                                            bottom = 7.dp,
+                                            top = 7.dp,
+                                            end = 12.dp,
+                                            start = 12.dp
                                         )
                                         .clickable {
                                             selectedCard = 1
@@ -81,13 +81,13 @@ fun MainScreen(isClicked:(Article)->Unit){
                                 border = if(selectedCard==2) null else CardDefaults.outlinedCardBorder(),
                                 colors = if(selectedCard==2) CardDefaults.cardColors(MaterialTheme.colorScheme.primaryContainer) else CardDefaults.cardColors(Color.Transparent)
                             ) {
-                                Text(text = "Health",
+                                Text(text = "Health", fontSize = 20.sp,
                                     modifier = Modifier
                                         .padding(
-                                            bottom = 5.dp,
-                                            top = 5.dp,
-                                            end = 10.dp,
-                                            start = 10.dp
+                                            bottom = 7.dp,
+                                            top = 7.dp,
+                                            end = 12.dp,
+                                            start = 12.dp
                                         )
                                         .clickable {
                                             selectedCard = 2
@@ -101,13 +101,13 @@ fun MainScreen(isClicked:(Article)->Unit){
                                 border = if(selectedCard==3) null else CardDefaults.outlinedCardBorder(),
                                 colors = if(selectedCard==3) CardDefaults.cardColors(MaterialTheme.colorScheme.primaryContainer) else CardDefaults.cardColors(Color.Transparent)
                             ){
-                                Text(text = "Entertainment",
+                                Text(text = "Entertainment", fontSize = 20.sp,
                                     modifier = Modifier
                                         .padding(
-                                            bottom = 5.dp,
-                                            top = 5.dp,
-                                            end = 10.dp,
-                                            start = 10.dp
+                                            bottom = 7.dp,
+                                            top = 7.dp,
+                                            end = 12.dp,
+                                            start = 12.dp
                                         )
                                         .clickable {
                                             selectedCard = 3
@@ -121,13 +121,13 @@ fun MainScreen(isClicked:(Article)->Unit){
                                 border = if(selectedCard==4) null else CardDefaults.outlinedCardBorder(),
                                 colors = if(selectedCard==4) CardDefaults.cardColors(MaterialTheme.colorScheme.primaryContainer) else CardDefaults.cardColors(Color.Transparent)
                             ){
-                                Text(text = "Sports",
+                                Text(text = "Sports", fontSize = 20.sp,
                                     modifier = Modifier
                                         .padding(
-                                            bottom = 5.dp,
-                                            top = 5.dp,
-                                            end = 10.dp,
-                                            start = 10.dp
+                                            bottom = 7.dp,
+                                            top = 7.dp,
+                                            end = 12.dp,
+                                            start = 12.dp
                                         )
                                         .clickable {
                                             selectedCard = 4

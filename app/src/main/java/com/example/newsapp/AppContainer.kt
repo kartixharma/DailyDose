@@ -1,5 +1,7 @@
 package com.example.newsapp
 
+import androidx.compose.ui.platform.LocalContext
+import com.example.newsapp.data.ArticleDatabase
 import com.example.newsapp.data.NetworkNewsRepository
 import com.example.newsapp.data.NewsRepository
 import com.example.newsapp.network.NewsApiService
@@ -11,7 +13,7 @@ import retrofit2.Retrofit
 interface AppContainer {
     val newsRepository: NewsRepository
 }
-class DefaultAppContainer: AppContainer{
+class DefaultAppContainer(newsApplication: NewsApplication) : AppContainer{
     //https://mocki.io
     private val retrofit = Retrofit.Builder()
         .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
@@ -23,6 +25,6 @@ class DefaultAppContainer: AppContainer{
     }
 
     override val newsRepository: NewsRepository by lazy {
-        NetworkNewsRepository(retrofitService)
+        NetworkNewsRepository(retrofitService, ArticleDatabase(newsApplication))
     }
 }

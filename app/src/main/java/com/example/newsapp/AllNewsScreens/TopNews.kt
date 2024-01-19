@@ -74,6 +74,7 @@ fun TopNews(newsUiState: NewsUiState, isClicked:(Article) -> Unit){
                 Card(elevation = CardDefaults.cardElevation(5.dp),
                     modifier = Modifier
                         .padding(top = 40.dp)
+                        .clickable{ isClicked(newsUiState.news.articles[it]) }
                         .height(300.dp)
                         .graphicsLayer {
                             lerp(
@@ -100,10 +101,10 @@ fun TopNews(newsUiState: NewsUiState, isClicked:(Article) -> Unit){
                             contentDescription = null,
                             contentScale = ContentScale.Crop,
                             modifier = Modifier
-                                .scale(1f)
+                                .size(320.dp)
                         )
                         Image(painter = painterResource(id = R.drawable.bgrad,
-                        ), contentDescription = null, modifier = Modifier.scale(1.01f))
+                        ), contentDescription = null, modifier = Modifier.scale(1.02f))
                         Column(
                             modifier = Modifier
                                 .fillMaxSize()
@@ -136,7 +137,7 @@ fun TopNews(newsUiState: NewsUiState, isClicked:(Article) -> Unit){
             }
             LazyColumn(modifier = Modifier.padding(top = 370.dp)){
                 items(newsUiState.news.articles){
-                    if(it.urlToImage!="null") {
+                    if(it.urlToImage.toString()!="null") {
                         NewsCard(article = it, isClicked = {
                             isClicked(it)
                         })
