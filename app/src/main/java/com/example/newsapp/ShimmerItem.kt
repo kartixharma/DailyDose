@@ -42,18 +42,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ShimmerCard(){
-    val pagerState = rememberPagerState(
-        pageCount = {5}, initialPage = 1
-    )
     Text(text = "Top Headlines", modifier = Modifier.padding(start=15.dp), style = MaterialTheme.typography.headlineMedium,
         fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onPrimaryContainer
     )
         Card(
             modifier = Modifier
-                .padding(top = 40.dp, start = 30.dp, end = 30.dp )
+                .padding(top = 40.dp, start = 40.dp, end = 40.dp )
                 .height(300.dp).fillMaxWidth(), shape = RoundedCornerShape(15.dp)
                 ){
             Column(modifier = Modifier.fillMaxSize()
@@ -66,7 +62,7 @@ fun ShimmerCard(){
         .fillMaxWidth(),
         horizontalArrangement = Arrangement.Center) {
         repeat(5){
-            val color = if (pagerState.currentPage==it){ if(isSystemInDarkTheme()) Color(0xFF1560bd) else Color(0xFF0047ab) }else Color.LightGray
+            val color = if (it==2){ if(isSystemInDarkTheme()) Color(0xFF1560bd) else Color(0xFF0047ab) }else Color.LightGray
             Box(modifier = Modifier
                 .padding(2.dp)
                 .clip(CircleShape)
@@ -120,9 +116,9 @@ fun Modifier.shimmerEffect(): Modifier = composed{
     background(
         brush = Brush.linearGradient(
             colors = listOf(
-                Color(0xFFB8B5B5),
+                Color(0xFFC5C5C5),
                 Color(0xFF8F8B8B),
-                Color(0xFFB8B5B5)
+                Color(0xFFC5C5C5)
             ),
             start = Offset(startofst, 0f),
             end = Offset(startofst+size.width.toFloat(), size.height.toFloat())

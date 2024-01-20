@@ -4,7 +4,9 @@ package com.example.newsapp
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -31,7 +33,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -40,6 +45,7 @@ import com.example.newsapp.AllNewsScreens.DetailScreen
 import com.example.newsapp.AllNewsScreens.MainScreen
 import com.example.newsapp.AllNewsScreens.SavedScreen
 import com.example.newsapp.AllNewsScreens.SearchScreen
+import com.example.newsapp.AllNewsScreens.WebView
 import com.example.newsapp.network.Article
 import com.example.newsapp.ui.theme.NewsAppTheme
 
@@ -48,7 +54,8 @@ enum class Screens {
     Saved,
     Search,
     Settings,
-    Detail
+    Detail,
+    Web
 }
 data class BottomNavigationItem(
     val title: String,
@@ -62,6 +69,14 @@ data class BottomNavigationItem(
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.auto(
+                Color.Transparent.toArgb(), Color.Transparent.toArgb()
+            ),
+            navigationBarStyle = SystemBarStyle.auto(
+                Color.Transparent.toArgb(), Color.Transparent.toArgb()
+            )
+        )
         setContent {
             NewsAppTheme {
                 val items = listOf(
@@ -122,14 +137,14 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                         }
-                    ) {innerPadding->
+                    ) {_->
                         val newsViewModel: NewsViewModel = viewModel(factory = NewsViewModel.Factory)
                         val state by newsViewModel.state.collectAsState(initial = NewsState())
                         lateinit var article: Article
                         NavHost(
                             navController = navController,
                             startDestination = Screens.News.name,
-                            modifier = Modifier.padding(innerPadding)
+                            modifier = Modifier.padding(bottom = 80.dp)
                         ) {
                             composable(route = Screens.News.name){
                                 MainScreen(isClicked = {
@@ -156,7 +171,15 @@ class MainActivity : ComponentActivity() {
                                 Settings()
                             }
                             composable(route = Screens.Detail.name){
-                                DetailScreen(article, addToDB = {newsViewModel.insertArticle(it)})
+                                DetailScreen(article, addToDB = {newsViewModel.insertArticle(it)}, web={
+                                    article=it
+                                    navController.navigate(route = Screens.Web.name)
+                                })
+                            }
+                            composable(route = Screens.Web.name){
+                                WebView(addToDB = {newsViewModel.insertArticle(it)},
+                                    article = article
+                                )
                             }
                         }
                     }

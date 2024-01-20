@@ -134,13 +134,17 @@ fun TopNews(newsUiState: NewsUiState, isClicked:(Article) -> Unit, retry:()->Uni
             Row(modifier = Modifier
                 .padding(top = 350.dp)
                 .fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center) {
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically) {
                 repeat(5){
-                    val color = if (pagerState.currentPage==it){ if(isSystemInDarkTheme()) Color(0xFF1560bd) else Color(0xFF0047ab) }else Color.LightGray
+                    val color = if (pagerState.currentPage==it){
+                        if(isSystemInDarkTheme()) Color(0xFF1560bd) else Color(0xFF0047ab) }
+                    else Color.LightGray
+                    val size = if (pagerState.currentPage==it){ 13.dp} else 10.dp
                     Box(modifier = Modifier
                         .padding(2.dp)
                         .clip(CircleShape)
-                        .size(11.dp)
+                        .size((size))
                         .background(color))
                 }
                 
