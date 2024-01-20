@@ -50,7 +50,7 @@ class NewsViewModel(private val newsRepository: NewsRepository): ViewModel() {
     fun setSrc(q: String) {
         search = q
         if(search!="") {
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.IO) {
                 newsUiState = try {
                     val Result = newsRepository.getAll(search)
                     NewsUiState.Success(Result)
@@ -64,7 +64,8 @@ class NewsViewModel(private val newsRepository: NewsRepository): ViewModel() {
         }
     }
     fun getTop() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
+            newsUiState = NewsUiState.Loading
             newsUiState = try {
                 val Result = newsRepository.getTop()
                 NewsUiState.Success(Result)
@@ -76,6 +77,7 @@ class NewsViewModel(private val newsRepository: NewsRepository): ViewModel() {
     }
     fun getHealth() {
         viewModelScope.launch(Dispatchers.IO) {
+            newsUiState = NewsUiState.Loading
             newsUiState = try {
                 val Result = newsRepository.getHealth()
                 NewsUiState.Success(Result)
@@ -87,6 +89,7 @@ class NewsViewModel(private val newsRepository: NewsRepository): ViewModel() {
     }
     fun getEnt() {
         viewModelScope.launch(Dispatchers.IO) {
+            newsUiState = NewsUiState.Loading
             newsUiState = try {
                 val Result = newsRepository.getEnt()
                 NewsUiState.Success(Result)
@@ -98,6 +101,7 @@ class NewsViewModel(private val newsRepository: NewsRepository): ViewModel() {
     }
     fun getSports() {
         viewModelScope.launch(Dispatchers.IO) {
+            newsUiState = NewsUiState.Loading
             newsUiState = try {
                 val Result = newsRepository.getSports()
                 NewsUiState.Success(Result)

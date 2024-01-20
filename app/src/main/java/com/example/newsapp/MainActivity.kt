@@ -37,9 +37,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.newsapp.AllNewsScreens.DetailScreen
+import com.example.newsapp.AllNewsScreens.MainScreen
 import com.example.newsapp.AllNewsScreens.SavedScreen
 import com.example.newsapp.AllNewsScreens.SearchScreen
-import com.example.newsapp.AllNewsScreens.Settings
 import com.example.newsapp.network.Article
 import com.example.newsapp.ui.theme.NewsAppTheme
 
@@ -138,7 +138,10 @@ class MainActivity : ComponentActivity() {
                                      })
                             }
                             composable(route = Screens.Search.name){
-                                SearchScreen()
+                                SearchScreen(isClicked = {
+                                    article = it
+                                    navController.navigate(route = Screens.Detail.name)
+                                })
                             }
                             composable(route = Screens.Saved.name){
                                 SavedScreen(state, isClicked = {

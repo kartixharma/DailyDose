@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -27,15 +28,13 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -45,20 +44,17 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.example.newsapp.NewsScreens
 import com.example.newsapp.R
 import com.example.newsapp.network.Article
 import com.example.newsapp.NewsUiState
-import kotlin.math.absoluteValue
+import com.example.newsapp.ShimmerCard
+import com.example.newsapp.ShimmerItem
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun TopNews(newsUiState: NewsUiState, isClicked:(Article) -> Unit){
+fun TopNews(newsUiState: NewsUiState, isClicked:(Article) -> Unit, retry:()->Unit){
     val pagerState = rememberPagerState(
         pageCount = {5}, initialPage = 1
     )
@@ -66,15 +62,29 @@ fun TopNews(newsUiState: NewsUiState, isClicked:(Article) -> Unit){
         fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onPrimaryContainer
     )
     when(newsUiState){
-        NewsUiState.Error -> Text(text = "error")
-        NewsUiState.Loading -> Text(text = "loading")
+        NewsUiState.Error -> {
+            Column(modifier = Modifier.fillMaxSize().padding(top = 200.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                Image(painter = painterResource(id = R.drawable.no_wifi), contentDescription = null, modifier = Modifier)
+                TextButton(onClick = retry) {
+                    Text(text = "Retry", style = MaterialTheme.typography.headlineMedium)
+                }
+            }
+        }
+        NewsUiState.Loading -> {
+            ShimmerCard()
+            LazyColumn(modifier = Modifier.padding(top=370.dp)){
+                items(10){
+                    ShimmerItem()
+                }
+            }
+        }
         is NewsUiState.Success -> {
             HorizontalPager(state = pagerState, contentPadding = PaddingValues(horizontal = 40.dp)) {
                 val pgofset = (pagerState.currentPage - it) + pagerState.currentPageOffsetFraction
                 Card(elevation = CardDefaults.cardElevation(5.dp),
                     modifier = Modifier
                         .padding(top = 40.dp)
-                        .clickable{ isClicked(newsUiState.news.articles[it]) }
+                        .clickable { isClicked(newsUiState.news.articles[it]) }
                         .height(300.dp)
                         .graphicsLayer {
                             lerp(
@@ -153,7 +163,7 @@ fun NewsCard(article: Article, isClicked:(Article) ->Unit){
     Card(
         modifier = Modifier
             .padding(start = 10.dp, end = 10.dp)
-            .clickable{ isClicked(article) }
+            .clickable { isClicked(article) }
             .height(120.dp), colors = CardDefaults.cardColors(Color.Transparent)) {
         Row {
             AsyncImage(model = ImageRequest.Builder(context = LocalContext.current)

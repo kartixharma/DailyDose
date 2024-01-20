@@ -42,6 +42,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -55,6 +56,16 @@ import java.time.LocalDateTime
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SavedScreen(state: NewsState, isClicked:(Article) -> Unit, onSwiped:(Article)->Unit) {
+    if(state.savedNews.isEmpty()){
+        Column(modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center) {
+            Text(textAlign = TextAlign.Center, text = "No saved news!",
+                modifier = Modifier.padding(top = 30.dp),
+                style = MaterialTheme.typography.headlineLarge,
+                color = Color.Gray)
+        }
+    }
     Text(text = "Saved News", modifier = Modifier.padding(10.dp), style = MaterialTheme.typography.headlineLarge)
     LazyColumn(modifier = Modifier.padding(top = 50.dp)){
             items(items = state.savedNews, key = { article -> article.id!! }) { article->
@@ -96,7 +107,7 @@ fun SavedNewsCard(article: Article, isClicked:(Article) ->Unit){
     Card(
         modifier = Modifier
             .padding(start = 10.dp, end = 10.dp, top = 10.dp)
-            .clickable{ isClicked(article) }
+            .clickable { isClicked(article) }
             .height(120.dp)) {
         Row {
             AsyncImage(model = ImageRequest.Builder(context = LocalContext.current)
@@ -115,7 +126,9 @@ fun SavedNewsCard(article: Article, isClicked:(Article) ->Unit){
                 .fillMaxHeight()) {
                 Text(text = article.title.toString(), maxLines = 3, overflow = TextOverflow.Ellipsis, fontWeight = FontWeight.Bold)
                 Column(
-                    modifier = Modifier.fillMaxSize().padding(5.dp),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(5.dp),
                     verticalArrangement = Arrangement.Bottom,
                     horizontalAlignment = Alignment.End
                 ) {
