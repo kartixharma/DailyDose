@@ -6,7 +6,7 @@ import com.example.newsapp.network.NewsResponse
 import kotlinx.coroutines.flow.Flow
 
 interface NewsRepository {
-    suspend fun getTop(): NewsResponse
+    suspend fun getTop(cnCode:String): NewsResponse
     suspend fun getAll(search: String): NewsResponse
     suspend fun getHealth(): NewsResponse
     suspend fun getEnt(): NewsResponse
@@ -14,14 +14,15 @@ interface NewsRepository {
     fun getArticles(): Flow<List<Article>>
     suspend fun insert(article: Article): Long
     suspend fun deleteArticle(article: Article)
+    suspend fun getScience():NewsResponse
 }
 
 class NetworkNewsRepository(
     private val newsApiService: NewsApiService,
     private val articleDatabase: ArticleDatabase
 ): NewsRepository{
-    override suspend fun getTop(): NewsResponse =
-        newsApiService.getTop()
+    override suspend fun getTop(cnCode:String): NewsResponse =
+        newsApiService.getTop(cnCode)
 
     override suspend fun getAll(search: String): NewsResponse =
         newsApiService.getAll(search)
@@ -41,4 +42,6 @@ class NetworkNewsRepository(
     override suspend fun insert(article: Article): Long = articleDatabase.dao.insert(article)
 
     override suspend fun deleteArticle(article: Article) = articleDatabase.dao.deleteArticle(article)
+    override suspend fun getScience(): NewsResponse =
+        newsApiService.getScience()
 }

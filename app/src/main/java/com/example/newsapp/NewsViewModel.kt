@@ -1,16 +1,11 @@
 package com.example.newsapp
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.newsapp.data.NewsRepository
@@ -19,9 +14,9 @@ import com.example.newsapp.network.NewsResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.IOException
 
@@ -63,11 +58,23 @@ class NewsViewModel(private val newsRepository: NewsRepository): ViewModel() {
             getTop()
         }
     }
+
     fun getTop() {
         viewModelScope.launch {
+            newsUiState = try {
+                val Result = newsRepository.getTop(_uiState.value.country)
+                NewsUiState.Success(Result)
+            }
+            catch (e: IOException){
+                NewsUiState.Error
+            }
+        }
+    }
+    fun getScience(){
+        viewModelScope.launch(Dispatchers.IO) {
             newsUiState = NewsUiState.Loading
             newsUiState = try {
-                val Result = newsRepository.getTop()
+                val Result = newsRepository.getScience()
                 NewsUiState.Success(Result)
             }
             catch (e: IOException){
@@ -122,7 +129,9 @@ class NewsViewModel(private val newsRepository: NewsRepository): ViewModel() {
             newsRepository.deleteArticle(article)
         }
     }
-
+    fun setArticle(article: Article){
+        _uiState.update { it.copy(article = article) }
+    }
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {

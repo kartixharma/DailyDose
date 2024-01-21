@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -44,6 +43,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
+import androidx.paging.PagingData
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.newsapp.R
@@ -147,7 +147,7 @@ fun TopNews(newsUiState: NewsUiState, isClicked:(Article) -> Unit, retry:()->Uni
                         .size((size))
                         .background(color))
                 }
-                
+
             }
             LazyColumn(modifier = Modifier.padding(top = 370.dp)){
                 items(newsUiState.news.articles){

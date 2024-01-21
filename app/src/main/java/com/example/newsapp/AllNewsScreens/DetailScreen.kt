@@ -39,6 +39,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -47,7 +48,7 @@ import com.example.newsapp.network.Article
 import kotlinx.serialization.descriptors.PrimitiveKind
 
 @Composable
-fun DetailScreen(article: Article, addToDB:(Article)-> Unit, web:(Article)->Unit){
+fun DetailScreen(article: Article, addToDB:(Article)-> Unit, web:(Article)->Unit, intent:()->Unit){
     val Context = LocalContext.current
     Scaffold(
         floatingActionButton = {
@@ -61,15 +62,21 @@ fun DetailScreen(article: Article, addToDB:(Article)-> Unit, web:(Article)->Unit
                 Icon(Icons.Filled.Star, contentDescription = null, Modifier.size(30.dp))
             }
         }
-
     )
-    {
-        val intent = Intent(Intent.ACTION_SEND).apply {
-            type = "text/plain"
-            putExtra(Intent.EXTRA_TEXT, article.url.toString())
-        }
-        LazyColumn( modifier = Modifier.padding(it)) {
+    {it->
+        LazyColumn( modifier = Modifier.padding()) {
             item {
+                Text(modifier = Modifier.padding(10.dp),
+                    text = article.title.toString(),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp
+                )
+                if(article.author.toString()!="null"){
+                    Text(modifier = Modifier.padding(bottom = 10.dp, start = 10.dp),
+                        text = "Author: ${article.author.toString()}",
+                        color = Color.LightGray
+                    )
+                }
                 AsyncImage(model = ImageRequest.Builder(context = LocalContext.current)
                     .data(article.urlToImage)
                     .crossfade(true)
@@ -78,25 +85,15 @@ fun DetailScreen(article: Article, addToDB:(Article)-> Unit, web:(Article)->Unit
                     error = painterResource(R.drawable.nope_not_here),
                     contentDescription = null,
                     contentScale= ContentScale.Crop,
-                    modifier = Modifier
+                    modifier = Modifier.padding(start = 10.dp, end =10.dp)
                         .aspectRatio(16f / 9f)
                         .clip(RoundedCornerShape(11.dp)))
-                Text(modifier = Modifier.padding(10.dp),
-                    text = article.title.toString(),
-                    fontWeight = FontWeight.Bold
-                )
-                Divider(modifier = Modifier.padding(5.dp))
                 if(article.content.toString()!="null"){
                     Text(modifier = Modifier.padding(10.dp),
                         text = article.content.toString()
                     )
                 }
                 Divider(modifier = Modifier.padding(5.dp))
-                if(article.author.toString()!="null"){
-                    Text(modifier = Modifier.padding(10.dp),
-                        text = "Author: ${article.author.toString()}",
-                    )
-                }
                 Text(modifier = Modifier.padding(10.dp),
                     text = "Published at: ${article.publishedAt.toString()}")
                 Row(modifier = Modifier.fillMaxSize(),
@@ -108,7 +105,7 @@ fun DetailScreen(article: Article, addToDB:(Article)-> Unit, web:(Article)->Unit
                             Modifier.scale(0.7f)
                         )
                     }
-                    IconButton(onClick = {startActivity(Context, intent, null)}) {
+                    IconButton(onClick = intent) {
                         Icon(imageVector = Icons.Filled.Share, contentDescription = null)
                     }
                 }

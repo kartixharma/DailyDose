@@ -8,10 +8,9 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -24,6 +23,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.paging.PagingData
 import com.example.newsapp.NewsViewModel
 import com.example.newsapp.network.Article
 
@@ -31,7 +31,8 @@ enum class NewsScreens {
     Main,
     Health,
     Entertainment,
-    Sports
+    Sports,
+    Science
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,11 +43,7 @@ fun MainScreen(isClicked:(Article)->Unit){
     var selectedCard by rememberSaveable{
         mutableStateOf(1)
     }
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    LazyRow {
+                    LazyRow(modifier = Modifier.padding(10.dp)) {
                         item {
                             Card(modifier = Modifier
                                 .padding(end = 10.dp),
@@ -66,7 +63,8 @@ fun MainScreen(isClicked:(Article)->Unit){
                                             selectedCard = 1
                                             newsViewModel.getTop()
                                             navController.navigate(NewsScreens.Main.name)
-                                        })
+                                        }
+                                )
                             }
                             Card(modifier = Modifier
                                 .padding(end = 10.dp),
@@ -128,19 +126,36 @@ fun MainScreen(isClicked:(Article)->Unit){
                                             navController.navigate(NewsScreens.Sports.name)
                                         })
                             }
+                            Card(modifier = Modifier
+                                .padding(end = 10.dp),
+                                shape = CircleShape,
+                                border = if(selectedCard==5) null else CardDefaults.outlinedCardBorder(),
+                                colors = if(selectedCard==5) CardDefaults.cardColors(MaterialTheme.colorScheme.primaryContainer) else CardDefaults.cardColors(Color.Transparent)
+                            ){
+                                Text(text = "Science", fontSize = 20.sp,
+                                    modifier = Modifier
+                                        .padding(
+                                            bottom = 7.dp,
+                                            top = 7.dp,
+                                            end = 12.dp,
+                                            start = 12.dp
+                                        )
+                                        .clickable {
+                                            selectedCard = 5
+                                            newsViewModel.getScience()
+                                            navController.navigate(NewsScreens.Science.name)
+                                        })
+                            }
                         }
                     }
-                }
-            )
-        },
-        content = { innerPadding ->
+
             NavHost(
                 navController = navController,
                 startDestination = NewsScreens.Main.name,
-                modifier = Modifier.padding(innerPadding)
+                modifier = Modifier.padding(top = 60.dp)
             ) {
                 composable(route = NewsScreens.Main.name){
-                    TopNews(newsUiState = newsUiState, isClicked={isClicked(it)}, retry = {newsViewModel.getTop()})
+                    TopNews(newsUiState = newsUiState, isClicked ={isClicked(it)}) { newsViewModel.getTop() }
                 }
                 composable(route = NewsScreens.Health.name){
                     HealthNews(newsUiState = newsUiState, isClicked={isClicked(it)}, retry = {newsViewModel.getHealth()})
@@ -151,9 +166,9 @@ fun MainScreen(isClicked:(Article)->Unit){
                 composable(route = NewsScreens.Sports.name){
                     SportsNews(newsUiState, isClicked={isClicked(it)}, retry = {newsViewModel.getSports()})
                 }
+                composable(route = NewsScreens.Science.name){
+                    ScienceNews(newsUiState, isClicked={isClicked(it)}, retry = {newsViewModel.getScience()})
+                }
 
             }
-        }
-    )
-
 }

@@ -15,7 +15,7 @@ interface NewsApiService {
         @Query("page")
         pgNo: Int = 1,
         @Query("apiKey")
-        apikey: String = "ed6ec2b8dbc44222b64d486c4164d924"
+        apikey: String = "d9e92ef97ac84bdb85b12054d32543a7"
     ):NewsResponse
     @GET("v2/top-headlines")
     suspend fun getHealth(
@@ -26,7 +26,7 @@ interface NewsApiService {
         @Query("page")
         pgNo: Int = 1,
         @Query("apiKey")
-        apikey: String = "ed6ec2b8dbc44222b64d486c4164d924"
+        apikey: String = "d9e92ef97ac84bdb85b12054d32543a7"
     ):NewsResponse
 
     @GET("v2/everything")
@@ -36,7 +36,7 @@ interface NewsApiService {
         @Query("page")
         pgNo: Int = 1,
         @Query("apiKey")
-        apikey: String = "ed6ec2b8dbc44222b64d486c4164d924"
+        apikey: String = "d9e92ef97ac84bdb85b12054d32543a7"
     ): NewsResponse
 
     @GET("v2/top-headlines")
@@ -48,7 +48,7 @@ interface NewsApiService {
         @Query("page")
         pgNo: Int = 1,
         @Query("apiKey")
-        apikey: String = "ed6ec2b8dbc44222b64d486c4164d924"
+        apikey: String = "d9e92ef97ac84bdb85b12054d32543a7"
     ):NewsResponse
 
     @GET("v2/top-headlines")
@@ -60,6 +60,18 @@ interface NewsApiService {
         @Query("page")
         pgNo: Int = 1,
         @Query("apiKey")
-        apikey: String = "ed6ec2b8dbc44222b64d486c4164d924"
+        apikey: String = "d9e92ef97ac84bdb85b12054d32543a7"
+    ):NewsResponse
+
+    @GET("v2/top-headlines")
+    suspend fun getScience(
+        @Query("country")
+        cnCode: String = "in",
+        @Query("category")
+        category: String = "Science",
+        @Query("page")
+        pgNo: Int = 1,
+        @Query("apiKey")
+        apikey: String = "d9e92ef97ac84bdb85b12054d32543a7"
     ):NewsResponse
 }
