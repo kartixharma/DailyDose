@@ -9,25 +9,16 @@ interface NewsApiService {
     //):NewsResponse
 
     @GET("v2/top-headlines")
-    suspend fun getTop(
+    suspend fun getNews(
         @Query("country")
-        cnCode: String = "in",
-        @Query("page")
-        pgNo: Int = 1,
-        @Query("apiKey")
-        apikey: String = "d9e92ef97ac84bdb85b12054d32543a7"
-    ):NewsResponse
-    @GET("v2/top-headlines")
-    suspend fun getHealth(
-        @Query("country")
-        cnCode: String = "in",
+        cnCode: String,
         @Query("category")
-        category: String = "health",
+        category: String = "",
         @Query("page")
         pgNo: Int = 1,
         @Query("apiKey")
-        apikey: String = "d9e92ef97ac84bdb85b12054d32543a7"
-    ):NewsResponse
+        apikey: String = "54adceba60e24076a0fcacab0fd4b523"
+    ): NewsResponse
 
     @GET("v2/everything")
     suspend fun getAll(
@@ -36,42 +27,6 @@ interface NewsApiService {
         @Query("page")
         pgNo: Int = 1,
         @Query("apiKey")
-        apikey: String = "d9e92ef97ac84bdb85b12054d32543a7"
+        apikey: String = "54adceba60e24076a0fcacab0fd4b523"
     ): NewsResponse
-
-    @GET("v2/top-headlines")
-    suspend fun getEnt(
-        @Query("country")
-        cnCode: String = "in",
-        @Query("category")
-        category: String = "Entertainment",
-        @Query("page")
-        pgNo: Int = 1,
-        @Query("apiKey")
-        apikey: String = "d9e92ef97ac84bdb85b12054d32543a7"
-    ):NewsResponse
-
-    @GET("v2/top-headlines")
-    suspend fun getSports(
-        @Query("country")
-        cnCode: String = "in",
-        @Query("category")
-        category: String = "Sports",
-        @Query("page")
-        pgNo: Int = 1,
-        @Query("apiKey")
-        apikey: String = "d9e92ef97ac84bdb85b12054d32543a7"
-    ):NewsResponse
-
-    @GET("v2/top-headlines")
-    suspend fun getScience(
-        @Query("country")
-        cnCode: String = "in",
-        @Query("category")
-        category: String = "Science",
-        @Query("page")
-        pgNo: Int = 1,
-        @Query("apiKey")
-        apikey: String = "d9e92ef97ac84bdb85b12054d32543a7"
-    ):NewsResponse
 }

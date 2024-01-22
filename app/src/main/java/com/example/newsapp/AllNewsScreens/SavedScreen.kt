@@ -8,8 +8,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -45,6 +47,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.newsapp.NewsState
@@ -84,7 +87,7 @@ fun SavedScreen(state: NewsState, isClicked:(Article) -> Unit, onSwiped:(Article
                         label = ""
                     )
                     Box(modifier = Modifier
-                        .padding(start = 10.dp, end = 10.dp, top = 10.dp)
+                        .padding(vertical = 9.dp, horizontal = 16.dp)
                         .fillMaxSize()
                         .background(Color.Transparent, shape = RoundedCornerShape(12.dp))){
                         Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete",
@@ -103,13 +106,20 @@ fun SavedScreen(state: NewsState, isClicked:(Article) -> Unit, onSwiped:(Article
 }
 
 @Composable
-fun SavedNewsCard(article: Article, isClicked:(Article) ->Unit){
+fun SavedNewsCard(article: Article, isClicked: (Article) -> Unit) {
     Card(
         modifier = Modifier
-            .padding(start = 10.dp, end = 10.dp, top = 10.dp)
-            .clickable { isClicked(article) }
-            .height(120.dp)) {
-        Row {
+            .padding(horizontal = 16.dp, vertical = 5.dp)
+            .fillMaxWidth()
+            .clickable { isClicked(article) },
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.elevatedCardElevation(4.dp),
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp)
+        ) {
             AsyncImage(model = ImageRequest.Builder(context = LocalContext.current)
                 .data(article.urlToImage)
                 .crossfade(true)
@@ -121,19 +131,25 @@ fun SavedNewsCard(article: Article, isClicked:(Article) ->Unit){
                 modifier = Modifier
                     .size(120.dp)
                     .clip(RoundedCornerShape(11.dp)))
-            Column(modifier = Modifier
-                .padding(start = 10.dp, top = 2.dp)
-                .fillMaxHeight()) {
-                Text(text = article.title.toString(), maxLines = 3, overflow = TextOverflow.Ellipsis, fontWeight = FontWeight.Bold)
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(5.dp),
-                    verticalArrangement = Arrangement.Bottom,
-                    horizontalAlignment = Alignment.End
-                ) {
-                    Text(text = article.publishedAt.toString(), style = MaterialTheme.typography.labelLarge)
-                }
+            Column(
+                modifier = Modifier
+                    .padding(start = 16.dp)
+                    .fillMaxHeight()
+            ) {
+                Text(
+                    text = article.title.toString(),
+                    maxLines = 3,
+                    overflow = TextOverflow.Ellipsis,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp,
+                    color = MaterialTheme.colorScheme.primary
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                Text(
+                    text = article.publishedAt.toString(),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.secondary
+                )
             }
         }
     }

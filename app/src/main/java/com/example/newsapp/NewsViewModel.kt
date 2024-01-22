@@ -8,10 +8,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.example.newsapp.data.NewsRepository
 import com.example.newsapp.network.Article
 import com.example.newsapp.network.NewsResponse
+import com.example.newsapp.network.PagingDataSource
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
@@ -25,7 +31,6 @@ sealed interface NewsUiState{
     object Error: NewsUiState
     object Loading: NewsUiState
 }
-
 class NewsViewModel(private val newsRepository: NewsRepository): ViewModel() {
     private val _uiState = MutableStateFlow(NewsState())
     val savedNews = newsRepository.getArticles().stateIn(viewModelScope, SharingStarted.WhileSubscribed(),
@@ -39,8 +44,13 @@ class NewsViewModel(private val newsRepository: NewsRepository): ViewModel() {
         private set
     var search by mutableStateOf("")
         private set
-    init {
-        getTop()
+    var country: String by mutableStateOf("India")
+    var cnCode: String by mutableStateOf("in")
+
+    fun getNews(category: String): Flow<PagingData<Article>> {
+        return Pager(PagingConfig(10)) {
+                PagingDataSource(newsRepository, category = category, cnCode = cnCode)
+            }.flow.cachedIn(viewModelScope)
     }
     fun setSrc(q: String) {
         search = q
@@ -55,69 +65,10 @@ class NewsViewModel(private val newsRepository: NewsRepository): ViewModel() {
             }
         }
         else{
-            getTop()
+            getNews("")
         }
     }
 
-    fun getTop() {
-        viewModelScope.launch {
-            newsUiState = try {
-                val Result = newsRepository.getTop(_uiState.value.country)
-                NewsUiState.Success(Result)
-            }
-            catch (e: IOException){
-                NewsUiState.Error
-            }
-        }
-    }
-    fun getScience(){
-        viewModelScope.launch(Dispatchers.IO) {
-            newsUiState = NewsUiState.Loading
-            newsUiState = try {
-                val Result = newsRepository.getScience()
-                NewsUiState.Success(Result)
-            }
-            catch (e: IOException){
-                NewsUiState.Error
-            }
-        }
-    }
-    fun getHealth() {
-        viewModelScope.launch(Dispatchers.IO) {
-            newsUiState = NewsUiState.Loading
-            newsUiState = try {
-                val Result = newsRepository.getHealth()
-                NewsUiState.Success(Result)
-            }
-            catch (e: IOException){
-                NewsUiState.Error
-            }
-        }
-    }
-    fun getEnt() {
-        viewModelScope.launch(Dispatchers.IO) {
-            newsUiState = NewsUiState.Loading
-            newsUiState = try {
-                val Result = newsRepository.getEnt()
-                NewsUiState.Success(Result)
-            }
-            catch (e: IOException){
-                NewsUiState.Error
-            }
-        }
-    }
-    fun getSports() {
-        viewModelScope.launch(Dispatchers.IO) {
-            newsUiState = NewsUiState.Loading
-            newsUiState = try {
-                val Result = newsRepository.getSports()
-                NewsUiState.Success(Result)
-            }
-            catch (e: IOException){
-                NewsUiState.Error
-            }
-        }
-    }
     fun insertArticle(article: Article){
         viewModelScope.launch {
             newsRepository.insert(article)

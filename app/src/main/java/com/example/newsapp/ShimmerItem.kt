@@ -6,6 +6,7 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -44,12 +46,12 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun ShimmerCard(){
-    Text(text = "Top Headlines", modifier = Modifier.padding(start=15.dp), style = MaterialTheme.typography.headlineMedium,
-        fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onPrimaryContainer
+    Text(text = "Top Headlines", modifier = Modifier.padding(start=15.dp, top = 10.dp), style = MaterialTheme.typography.headlineMedium,
+        fontWeight = FontWeight.SemiBold
     )
         Card(
             modifier = Modifier
-                .padding(top = 40.dp, start = 40.dp, end = 40.dp )
+                .padding(top = 50.dp, start = 40.dp, end = 40.dp )
                 .height(300.dp).fillMaxWidth(), shape = RoundedCornerShape(15.dp)
                 ){
             Column(modifier = Modifier.fillMaxSize()
@@ -58,11 +60,11 @@ fun ShimmerCard(){
         }
 
     Row(modifier = Modifier
-        .padding(top = 350.dp)
+        .padding(top = 355.dp)
         .fillMaxWidth(),
         horizontalArrangement = Arrangement.Center) {
         repeat(5){
-            val color = if (it==2){ if(isSystemInDarkTheme()) Color(0xFF1560bd) else Color(0xFF0047ab) }else Color.LightGray
+            val color = if (it==1){ if(isSystemInDarkTheme()) Color(0xFF1560bd) else Color(0xFF0047ab) }else Color.LightGray
             Box(modifier = Modifier
                 .padding(2.dp)
                 .clip(CircleShape)
@@ -76,16 +78,22 @@ fun ShimmerCard(){
 fun ShimmerItem(){
     Card(
         modifier = Modifier
-            .padding(start = 10.dp, end = 10.dp)
-            .height(120.dp), colors = CardDefaults.cardColors(Color.Transparent)) {
-        Row {
+            .padding(horizontal = 16.dp, vertical = 5.dp)
+            .fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.elevatedCardElevation(4.dp)) {
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp)
+        ) {
             Column(
-                modifier = Modifier
+                modifier = Modifier.clip(RoundedCornerShape(11.dp))
                     .shimmerEffect()
                     .size(120.dp)
-                    .clip(RoundedCornerShape(11.dp))){}
+            ){}
             Column(modifier = Modifier
-                .padding(start = 10.dp, top = 2.dp)
+                .padding(start = 16.dp)
                 .fillMaxSize()) {
                 Column(
                     modifier = Modifier
@@ -98,7 +106,6 @@ fun ShimmerItem(){
             }
         }
     }
-    Divider(modifier = Modifier.padding(5.dp))
 }
 
 fun Modifier.shimmerEffect(): Modifier = composed{

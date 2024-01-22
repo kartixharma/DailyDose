@@ -19,6 +19,5 @@ data class NewsState(
         title= "",
         url ="",
         urlToImage ="",
-    ),
-    val country: String = "in"
+    )
 )

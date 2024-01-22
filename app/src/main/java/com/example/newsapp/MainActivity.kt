@@ -71,6 +71,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             val Context = LocalContext.current
             NewsAppTheme {
+                val newsViewModel: NewsViewModel = viewModel(factory = NewsViewModel.Factory)
+                val state by newsViewModel.state.collectAsState(initial = NewsState())
                 val items = listOf(
                     BottomNavigationItem(
                         title = "News",
@@ -130,8 +132,6 @@ class MainActivity : ComponentActivity() {
                         }
                         }
                     ) {innerpadding->
-                        val newsViewModel: NewsViewModel = viewModel(factory = NewsViewModel.Factory)
-                        val state by newsViewModel.state.collectAsState(initial = NewsState())
                         val intent = Intent(Intent.ACTION_SEND).apply {
                             type = "text/plain"
                             putExtra(Intent.EXTRA_TEXT, state.article.url)
@@ -142,7 +142,8 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier.padding(innerpadding)
                         ) {
                             composable(route = Screens.News.name){
-                                MainScreen(isClicked = {
+                                MainScreen(newsViewModel,
+                                        isClicked = {
                                     newsViewModel.setArticle(it)
                                     navController.navigate(route = Screens.Detail.name)
                                      })
@@ -163,7 +164,10 @@ class MainActivity : ComponentActivity() {
                                 })
                             }
                             composable(route = Screens.Settings.name){
-                                Settings()
+                                Settings(selectedCountry = newsViewModel.country, onCountrySelected = { cn, cd->
+                                    newsViewModel.country=cn
+                                    newsViewModel.cnCode=cd
+                                })
                             }
                             composable(route = Screens.Detail.name){
 
