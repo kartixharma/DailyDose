@@ -94,12 +94,11 @@ fun MainScreen(newsViewModel:NewsViewModel, isClicked:(Article)->Unit){
             ) {
                 Column(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .padding(15.dp),
+                        .fillMaxSize(),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(
+                    Text(modifier = Modifier.padding(15.dp),
                         text = name,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,

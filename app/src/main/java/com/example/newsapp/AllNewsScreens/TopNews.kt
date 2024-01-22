@@ -80,7 +80,6 @@ fun TopNews(newsViewModel: NewsViewModel, isClicked:(Article) -> Unit, retry:()-
                         Text(text = "Retry", style = MaterialTheme.typography.headlineMedium)
                     }
                 }
-
         }
         LoadState.Loading -> {
             ShimmerCard()
@@ -107,7 +106,7 @@ fun TopNews(newsViewModel: NewsViewModel, isClicked:(Article) -> Unit, retry:()-
                                         scaleY = scale
                                     }
                             }, colors = CardDefaults.cardColors(MaterialTheme.colorScheme.primaryContainer)) {
-                        Box {
+                        Box(modifier = Modifier.fillMaxSize()) {
                             AsyncImage(model = ImageRequest.Builder(context = LocalContext.current)
                                 .data(newsList[it]!!.urlToImage)
                                 .crossfade(true)
@@ -122,7 +121,7 @@ fun TopNews(newsViewModel: NewsViewModel, isClicked:(Article) -> Unit, retry:()-
                                     .size(320.dp)
                             )
                             Image(painter = painterResource(id = R.drawable.whatsapp_image_2024_01_22_at_14_19_20_0d04cdfe,
-                            ), contentDescription = null, modifier = Modifier.scale(3f))
+                            ), contentDescription = null, modifier = Modifier.fillMaxSize())
                             Column(
                                 modifier = Modifier
                                     .fillMaxSize()
