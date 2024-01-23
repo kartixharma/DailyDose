@@ -3,11 +3,11 @@
 DailyDose is a news app that delivers the latest and most relevant news from around the world to your device using "newsapi.org" in which you can read, save, search and share news articles
 ### Implementation Highlights:
 
-- #### API Integration with newsapi.org using Retrofit
-- #### Dependency Injection: Manual DI
-- #### Pagination with Paging3 Library
-- #### Database Operations with Converters
-- #### Local Storage with Room Database to save articles locally
+- #### Utilized Retrofit for seamless API integration with newsapi.org.
+- #### Implemented manual Dependency Injection for efficient code management.
+- #### Incorporated Paging3 Library for smooth pagination of news articles.
+- #### Used converters to facilitate database operations.
+- #### Leveraged Room Database to save articles locally.
 - #### Enhanced Reading Experience with WebView:
 
 ### Screenshots:
