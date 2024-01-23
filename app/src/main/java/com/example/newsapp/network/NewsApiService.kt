@@ -17,7 +17,7 @@ interface NewsApiService {
         @Query("page")
         pgNo: Int = 1,
         @Query("apiKey")
-        apikey: String = "54adceba60e24076a0fcacab0fd4b523"
+        apikey: String = "08c37aa35cd647e98db44c46bad34690"
     ): NewsResponse
 
     @GET("v2/everything")
@@ -27,6 +27,6 @@ interface NewsApiService {
         @Query("page")
         pgNo: Int = 1,
         @Query("apiKey")
-        apikey: String = "54adceba60e24076a0fcacab0fd4b523"
+        apikey: String = "08c37aa35cd647e98db44c46bad34690"
     ): NewsResponse
 }

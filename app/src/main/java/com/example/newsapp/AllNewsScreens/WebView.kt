@@ -45,6 +45,7 @@ fun WebView(article: Article, addToDB:(Article)->Unit) {
                 )
                 webViewClient= WebViewClient()
                 loadUrl(article.url.toString())
+                settings.javaScriptEnabled = true
             } },
             update = { it.loadUrl(article.url.toString()) }
         )
